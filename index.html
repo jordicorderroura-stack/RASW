@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ca">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>WebAR Switch NFT</title>
+  <script src="https://cdn.jsdelivr.net/gh/aframevr/aframe@1c2407b26c61958baa93967b5412487cd94b290b/dist/aframe-master.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+  <style>
+    body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; }
+    .arjs-loader {
+      height: 100%; width: 100%; position: absolute; top: 0; left: 0;
+      background-color: rgba(0, 0, 0, 0.82); z-index: 9999;
+      display: flex; justify-content: center; align-items: center;
+      color: white; text-align: center; padding: 1rem; box-sizing: border-box;
+    }
+    #status {
+      position: fixed; top: 10px; left: 10px; right: 10px; z-index: 10000;
+      background: rgba(0,0,0,.6); color: white; padding: 10px 12px;
+      border-radius: 10px; font-size: 14px; line-height: 1.35;
+    }
+  </style>
+</head>
+<body>
+  <div class="arjs-loader" id="loader">
+    <div>
+      <strong>Cargando reconocimiento del switch...</strong><br />
+      Si se queda aquí, revisa que existan los archivos:<br />
+      descriptors/provasw-01.fset, .fset3 y .iset
+    </div>
+  </div>
+
+  <div id="status">Apunta la cámara a la foto/frontal del switch.</div>
+
+  <a-scene
+    vr-mode-ui="enabled: false;"
+    renderer="logarithmicDepthBuffer: true; antialias: true; precision: medium;"
+    embedded
+    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
+  >
+    <!--
+      IMPORTANTE:
+      url="descriptors/switch-01" significa que deben existir:
+      descriptors/provasw.fset
+      descriptors/provasw.fset3
+      descriptors/provasw.iset
+    -->
+    <a-nft
+      id="switchTarget"
+      type="nft"
+      url="descriptors/provasw"
+      emitevents="true"
+      smooth="true"
+      smoothCount="10"
+      smoothTolerance="0.01"
+      smoothThreshold="5"
+    >
+      <!-- Marco de referencia visual. Puedes borrarlo cuando ya esté ajustado. -->
+      <a-plane position="0 0 0" rotation="-90 0 0" width="420" height="90" color="#111" opacity="0.18"></a-plane>
+
+      <!-- Etiquetas de ejemplo. Ajusta X para izquierda/derecha y Z para arriba/abajo. -->
+      <a-text value="P1"  position="-185 0 -18" rotation="-90 0 0" align="center" color="yellow" width="80"></a-text>
+      <a-text value="P2"  position="-155 0 -18" rotation="-90 0 0" align="center" color="yellow" width="80"></a-text>
+      <a-text value="P3"  position="-125 0 -18" rotation="-90 0 0" align="center" color="yellow" width="80"></a-text>
+      <a-text value="P4"  position="-95 0 -18"  rotation="-90 0 0" align="center" color="yellow" width="80"></a-text>
+      <a-text value="P5"  position="-65 0 -18"  rotation="-90 0 0" align="center" color="yellow" width="80"></a-text>
+      <a-text value="P6"  position="-35 0 -18"  rotation="-90 0 0" align="center" color="yellow" width="80"></a-text>
+      <a-text value="P7"  position="-5 0 -18"   rotation="-90 0 0" align="center" color="yellow" width="80"></a-text>
+      <a-text value="P8"  position="25 0 -18"   rotation="-90 0 0" align="center" color="yellow" width="80"></a-text>
+      <a-text value="UPLINK" position="85 0 -18" rotation="-90 0 0" align="center" color="cyan" width="90"></a-text>
+      <a-text value="PoE" position="145 0 -18" rotation="-90 0 0" align="center" color="lime" width="90"></a-text>
+
+      <!-- Lineas simples hacia puertos -->
+      <a-entity line="start: -185 0 -10; end: -185 0 10; color: yellow"></a-entity>
+      <a-entity line="start: -155 0 -10; end: -155 0 10; color: yellow"></a-entity>
+      <a-entity line="start: -125 0 -10; end: -125 0 10; color: yellow"></a-entity>
+      <a-entity line="start: -95 0 -10; end: -95 0 10; color: yellow"></a-entity>
+      <a-entity line="start: -65 0 -10; end: -65 0 10; color: yellow"></a-entity>
+      <a-entity line="start: -35 0 -10; end: -35 0 10; color: yellow"></a-entity>
+      <a-entity line="start: -5 0 -10; end: -5 0 10; color: yellow"></a-entity>
+      <a-entity line="start: 25 0 -10; end: 25 0 10; color: yellow"></a-entity>
+    </a-nft>
+
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <script>
+    const loader = document.getElementById('loader');
+    const status = document.getElementById('status');
+    const target = document.getElementById('switchTarget');
+
+    window.addEventListener('arjs-nft-loaded', () => {
+      loader.style.display = 'none';
+      status.textContent = 'Reconocimiento cargado. Enfoca el switch de frente.';
+    });
+
+    target.addEventListener('markerFound', () => {
+      status.textContent = 'Switch detectado. Mostrando puertos.';
+    });
+
+    target.addEventListener('markerLost', () => {
+      status.textContent = 'He perdido el switch. Enfoca de frente y con buena luz.';
+    });
+  </script>
+</body>
+</html>
