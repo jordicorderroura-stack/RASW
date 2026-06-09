@@ -32,12 +32,20 @@
 
   <div id="status">Apunta la cámara a la foto/frontal del switch.</div>
 
-  <a-scene
-    vr-mode-ui="enabled: false;"
-    renderer="logarithmicDepthBuffer: true; antialias: true; precision: medium;"
-    embedded
-    arjs="trackingMethod: best; sourceType: webcam; debugUIEnabled: false;"
-  >
+ <a-scene
+  vr-mode-ui="enabled: false;"
+  renderer="logarithmicDepthBuffer: true; antialias: true; precision: high;"
+  embedded
+  arjs="
+    trackingMethod: best;
+    sourceType: webcam;
+    sourceWidth: 1920;
+    sourceHeight: 1080;
+    displayWidth: 1920;
+    displayHeight: 1080;
+    debugUIEnabled: false;
+  "
+>
     <!--
       IMPORTANTE:
       url="descriptors/switch-01" significa que deben existir:
